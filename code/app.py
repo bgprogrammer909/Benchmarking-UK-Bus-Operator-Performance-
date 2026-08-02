@@ -33,7 +33,13 @@ st.set_page_config(
 # ----------------------------------------------------------------------------
 # CONSTANTS — cluster labels & the executive colour palette
 # ----------------------------------------------------------------------------
-DATA_PATH = r"output\dashboard_data.csv"
+from pathlib import Path
+
+# BASE_DIR points to 'code/' directory where app.py lives
+BASE_DIR = Path(__file__).resolve().parent
+
+# Go up one level to root, then into 'output/'
+DATA_PATH = BASE_DIR.parent / "output" / "dashboard_data.csv"
 
 # Maps the raw ML cluster IDs (0-3) to business-friendly labels.
 # The underlying IDs from the `prediction` column are NEVER altered —
