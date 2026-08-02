@@ -2,14 +2,6 @@
 UK Bus Operator Performance — Executive Analytics Dashboard
 =============================================================
 Big Data Project | Streamlit + Plotly
-
-This dashboard visualizes the OUTPUT of an existing ML clustering model
-(the `prediction` column, values 0-3). The model itself is NOT modified,
-re-trained, or re-thresholded anywhere in this file — the four clusters
-produced by the model are preserved and displayed as-is.
-
-Run with:
-    streamlit run app.py
 """
 
 import hashlib
