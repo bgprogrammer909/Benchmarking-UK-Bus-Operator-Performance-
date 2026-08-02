@@ -33,13 +33,38 @@ st.set_page_config(
 # ----------------------------------------------------------------------------
 # CONSTANTS — cluster labels & the executive colour palette
 # ----------------------------------------------------------------------------
+import os
 from pathlib import Path
+import pandas as pd
+import streamlit as st
 
-# BASE_DIR points to 'code/' directory where app.py lives
 BASE_DIR = Path(__file__).resolve().parent
 
-# Go up one level to root, then into 'output/'
-DATA_PATH = BASE_DIR.parent / "output" / "dashboard_data.csv"
+# Check potential locations for the CSV file
+candidate_paths = [
+    BASE_DIR.parent / "output" / "dashboard_data.csv",  # Root / output / dashboard_data.csv
+    BASE_DIR / "output" / "dashboard_data.csv",         # code / output / dashboard_data.csv
+    BASE_DIR.parent / "dashboard_data.csv",             # Root / dashboard_data.csv
+    BASE_DIR / "dashboard_data.csv",                    # code / dashboard_data.csv
+]
+
+DATA_PATH = None
+for path in candidate_paths:
+    if path.exists():
+        DATA_PATH = path
+        break
+
+@st.cache_data
+def load_data(path_arg):
+    if path_arg is None or not Path(path_arg).exists():
+        # Help diagnose directly on the Streamlit Cloud UI
+        st.error("❌ `dashboard_data.csv` could not be found in the repository!")
+        st.write("Current Working Directory:", os.getcwd())
+        st.write("Checked Candidate Paths:")
+        for p in candidate_paths:
+            st.code(str(p))
+        st.stop()
+    return pd.read_csv(path_arg)
 
 # Maps the raw ML cluster IDs (0-3) to business-friendly labels.
 # The underlying IDs from the `prediction` column are NEVER altered —
